@@ -138,16 +138,16 @@ def gen_config(config_num:int) -> str:
                       3: Account.from_key(PRIV_KEY_3).address}
     
     num_to_port = {1: 38528, 2:38529, 3: 38530}
+    http_port = {1: 8545, 2: 8546, 3: 8547}
     
     # Weird formatting but must be kept like this - do not alter!
     # We will disable RPC as this is not needed if solely using Amana
 
     config_text = f'''privnet=true
 amana=true
-amanaenv="--unlock {num_to_address[config_num]} --password password.txt --http.port {num_to_port[config_num]} --miner.etherbase {num_to_address[config_num]} --mine"
+amanaenv="--unlock {num_to_address[config_num]} --password password.txt --port {num_to_port[config_num]} --http.port {http_port[config_num]} --miner.etherbase {num_to_address[config_num]} --mine"
 norpc=true
-p2ptcpport={num_to_port[config_num]}
-p2pudpport={num_to_port[config_num]}
+
 
     '''
     return config_text

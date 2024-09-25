@@ -82,12 +82,14 @@ def gen_binary():
         repl_alloc_ether = repl_extra_data.replace("0x71bc4403af41634cda7c32600a8024d54e7f6499", Account.from_key(PRIV_KEY_1).address) 
         custom_genesis = repl_alloc_ether
 
-    with open(GENESIS_SOURCE_CODE, "w") as orig_binary:
-        orig_binary.write(custom_genesis)     # replace genesis.go with our modified version
+    #  # We can use custom genesis now - this is no longer needed
+    
+    # with open(GENESIS_SOURCE_CODE, "w") as orig_binary:
+    #     orig_binary.write(custom_genesis)     # replace genesis.go with our modified version
         
     # Lets compile our new binary from source code
-    print ("Compiling qng binary...")
-    subprocess.Popen("cd " + os.path.expanduser("~") + "/qng && make", shell=True).wait()
+    # print ("Compiling qng binary...")
+    # subprocess.Popen("cd " + os.path.expanduser("~") + "/qng && make", shell=True).wait()
 
 def create_node_files():
     # Copy binary into eacb one of the nodes
@@ -145,7 +147,7 @@ def gen_config(config_num:int) -> str:
 
     config_text = f'''privnet=true
 amana=true
-amanaenv="--unlock {num_to_address[config_num]} --password password.txt --port {num_to_port[config_num]} --http.port {http_port[config_num]} --miner.etherbase {num_to_address[config_num]} --mine"
+amanaenv="--unlock {num_to_address[config_num]} --password password.txt --port {num_to_port[config_num]} --miner.pending.feeRecipient {num_to_address[config_num]} --mine"
 norpc=true
 
 

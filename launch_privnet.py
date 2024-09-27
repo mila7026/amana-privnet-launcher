@@ -175,7 +175,7 @@ def gen_config(config_num: int) -> str:
     
     bootnodeToConfig = { 1: enode_addrs[2] + "," + enode_addrs[3], 
                          2: enode_addrs[1] + "," + enode_addrs[3], 
-                         3: enode_addrs[1] + "+" + enode_addrs[2] }
+                         3: enode_addrs[1] + "," + enode_addrs[2] }
     
     # Weird formatting but must be kept like this - do not alter!
     # We will disable blockDAG RPC as this is not needed if solely using Amana

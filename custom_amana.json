@@ -1,44 +1,44 @@
 {
-	"config": {
-		"chainId": 2477,
-		"homesteadBlock": 0,
-		"daoForkBlock": 0,
-		"daoForkSupport": false,
-		"eip150Block": 0,
-		"eip155Block": 0,
-		"eip158Block": 0,
-		"byzantiumBlock": 0,
-		"constantinopleBlock": 0,
-		"petersburgBlock": 0,
-		"istanbulBlock": 0,
-		"muirGlacierBlock": 0,
-		"berlinBlock": 0,
-		"londonBlock": 0,
-		"arrowGlacierBlock": 0,
-		"grayGlacierBlock": 0,
-		"shanghaiTime": 0,
-		"cancunTime": 0,
-		"clique": {
-			"period": 5,
-			"epoch": 30000
-		}
-	},
-	"nonce": "0x0",
-	"timestamp": "0x5b3eab35",
-	"extraData": "0x0000000000000000000000000000000000000000000000000000000000000000Ef0E10FAe6774F5074BeBd50E036372dBA68fF270000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-	"gasLimit": "0x47b760",
-	"difficulty": "0x1",
-	"mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-	"coinbase": "0x0000000000000000000000000000000000000000",
-	"alloc": {
-		"0xEf0E10FAe6774F5074BeBd50E036372dBA68fF27": {
-			"balance": "0x33b2e3c9fd0803ce8000000"
-		}
-	},
-	"number": "0x0",
-	"gasUsed": "0x0",
-	"parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-	"baseFeePerGas": null,
-	"excessBlobGas": null,
-	"blobGasUsed": null
+    "config": {
+        "chainId": 2477,
+        "homesteadBlock": 0,
+        "daoForkBlock": 0,
+        "daoForkSupport": false,
+        "eip150Block": 0,
+        "eip155Block": 0,
+        "eip158Block": 0,
+        "byzantiumBlock": 0,
+        "constantinopleBlock": 0,
+        "petersburgBlock": 0,
+        "istanbulBlock": 0,
+        "muirGlacierBlock": 0,
+        "berlinBlock": 0,
+        "londonBlock": 0,
+        "arrowGlacierBlock": 0,
+        "grayGlacierBlock": 0,
+        "shanghaiTime": 0,
+        "cancunTime": 0,
+        "clique": {
+            "period": 5,
+            "epoch": 30000
+        }
+    },
+    "nonce": "0x0",
+    "timestamp": "0x5b3eab35",
+    "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000Ce0120CB2f27B6a23ab10dA277758648486a2636492Ba9930D909e9bb47F410fB829fE8bd4C3932111F49424063bA67E2bA7425E6278b467d07Dd1E20000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "gasLimit": "0x47b760",
+    "difficulty": "0x1",
+    "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "coinbase": "0x0000000000000000000000000000000000000000",
+    "alloc": {
+        "0xCe0120CB2f27B6a23ab10dA277758648486a2636": {
+            "balance": "0x33b2e3c9fd0803ce8000000"
+        }
+    },
+    "number": "0x0",
+    "gasUsed": "0x0",
+    "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "baseFeePerGas": null,
+    "excessBlobGas": null,
+    "blobGasUsed": null
 }

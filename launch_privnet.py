@@ -88,7 +88,7 @@ def gen_binary():
     extraData = "0x" + vanity + sealer_addr_1 + sealer_addr_2 + sealer_addr_3 + sig  
 
     # Modiy custom_amana.json file
-    with open("custom_amana.json", "rw") as json_file:
+    with open("custom_amana_template.json", "r+") as json_file:
         amana_gen = json.load(json_file)
         amana_gen["extraData"] = extraData
         
@@ -97,8 +97,15 @@ def gen_binary():
         amana_gen["alloc"] = {
             Account.from_key(PRIV_KEY_1).address: {"balance": "0x33b2e3c9fd0803ce8000000"}
         }
+        
         # Write new json object to file
-        json_file.write(json.dumps(amana_gen))
+        with open("custom_amana.json", "w") as json_file:
+            json_file.write(json.dumps(amana_gen, indent=4))
+        
+    # Copy the genesis file to each node directory
+    subprocess.Popen("cp custom_amana.json " + NODE_1_DIRECTORY, shell=True).wait()
+    subprocess.Popen("cp custom_amana.json " + NODE_2_DIRECTORY, shell=True).wait()
+    subprocess.Popen("cp custom_amana.json " + NODE_3_DIRECTORY, shell=True).wait()
 
 
 def create_node_files():
@@ -162,9 +169,9 @@ def gen_config(config_num: int) -> str:
     
     num_to_port = { 1: PORT_1, 2: PORT_2, 3: PORT_3 }
     # http_port = {1: 8545, 2: 8546, 3: 8547}
-    enode_addrs = { 1: ENODE_PRIV_1.publicKey().toString() + "@" + IP_ADDRESS_1 + ":" + str(PORT_1),
-                    2: ENODE_PRIV_2.publicKey().toString() + "@" + IP_ADDRESS_2 + ":" + str(PORT_2),
-                    3: ENODE_PRIV_3.publicKey().toString() + "@" + IP_ADDRESS_3 + ":" + str(PORT_3) }
+    enode_addrs = { 1: ENODE_PREFIX + ENODE_PRIV_1.publicKey().toString() + "@" + IP_ADDRESS_1 + ":" + str(PORT_1),
+                    2: ENODE_PREFIX + ENODE_PRIV_2.publicKey().toString() + "@" + IP_ADDRESS_2 + ":" + str(PORT_2),
+                    3: ENODE_PREFIX + ENODE_PRIV_3.publicKey().toString() + "@" + IP_ADDRESS_3 + ":" + str(PORT_3) }
     
     bootnodeToConfig = { 1: enode_addrs[2] + "," + enode_addrs[3], 
                          2: enode_addrs[1] + "," + enode_addrs[3], 

@@ -184,7 +184,7 @@ def gen_config(config_num: int) -> str:
     config_text = f'''privnet=true
 amana=true
 amanaenv="--unlock { num_to_address[config_num] } --password password.txt --port { num_to_port[config_num] } --bootnodes { bootnodeToConfig[config_num] } --miner.pending.feeRecipient { num_to_address[config_num] } --mine"
-amangen="custom_amana.json"
+amanagen="custom_amana.json"
 norpc=true
 evmenv="--nodiscover --networkid 0 --port 0"
 

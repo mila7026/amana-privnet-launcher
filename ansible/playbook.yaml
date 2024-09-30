@@ -1,0 +1,79 @@
+- name: Test Ansible
+  hosts: poa_network
+  tasks:
+    - name: Ping hosts
+      ansible.builtin.ping:
+    
+    - name: Print Message
+      ansible.builtin.debug:
+        msg: Hello World!
+  
+  tags: test-ansible 
+
+
+- name: Set up Geth RPC node & pm2
+  hosts: test_server
+  tags: install-rpc
+      
+  tasks:
+    - name: Create directory to run Geth node
+      ansible.builtin.file:
+        path: ~/geth-node/
+        state: directory
+        mode: '0755' 
+    
+    - name: Download Geth binary (v.1.13.12) & untar
+      ansible.builtin.unarchive:
+        src: https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.13.12-02eb36af.tar.gz
+        dest: ~/geth-node/
+        remote_src: yes
+        creates: ~/geth-node/geth-linux-amd64-1.13.12-02eb36af
+    
+    - name: Install Curl 
+      become: yes
+      ansible.builtin.apt:
+        name: curl
+        state: latest
+        update_cache: yes
+
+    - name: Download and install NVM
+      ansible.builtin.shell:
+        cmd: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+        creates: ~/.nvm
+        executable: /bin/bash
+    
+    - name: Install node
+      ansible.builtin.shell: source ~/.nvm/nvm.sh && nvm install {{item}}
+      args:
+        executable: /bin/bash
+        chdir: "$HOME"
+        creates: "$HOME/.nvm/versions/node/v{{item}}"
+      loop:
+        - 20.15.0 
+    
+    - name: Install pm2
+      ansible.builtin.shell:
+        cmd: source ~/.nvm/nvm.sh && nvm use 20 && npm install -g pm2
+        executable: /bin/bash
+
+    - name: Copy genesis & launch script
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: ~/geth-node/
+      loop:
+        - genesis.json
+        - launch.sh
+    
+    - name: Initialse Geth database
+      ansible.builtin.shell:
+        cmd: ./geth-linux-amd64-1.13.12-02eb36af/geth init --datadir data genesis.json
+        chdir: ~/geth-node
+        executable: /bin/bash
+
+    - name: Run the node
+      ansible.builtin.shell:
+        cmd: source ~/.nvm/nvm.sh && nvm use 20 && pm2 start launch.sh --name node-rpc
+        chdir: ~/geth-node
+        executable: /bin/bash
+
+

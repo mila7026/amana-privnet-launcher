@@ -179,7 +179,7 @@ def gen_config(config_num: int) -> str:
     
     # Weird formatting but must be kept like this - do not alter!
     # We will disable blockDAG RPC as this is not needed if solely using Amana
-    # Update - disabled the RPC server for qng EVM
+    # disabled the RPC server for qng EVM
 
     config_text = f'''privnet=true
 amana=true
@@ -193,16 +193,16 @@ evmenv="--nodiscover --networkid 0 --port 0"
 
 def create_config():
     print("Creating configuration files for nodes...")
-
-    with open(NODE_1_DIRECTORY + "/config_1.toml", "w") as config_file:
+    # Give same name to make it easier for Ansible
+    with open(NODE_1_DIRECTORY + "/config.toml", "w") as config_file:
         config_text = gen_config(1)
         config_file.write(config_text)
 
-    with open(NODE_2_DIRECTORY + "/config_2.toml", "w") as config_file:
+    with open(NODE_2_DIRECTORY + "/config.toml", "w") as config_file:
         config_text = gen_config(2)
         config_file.write(config_text)
 
-    with open(NODE_3_DIRECTORY + "/config_3.toml", "w") as config_file:
+    with open(NODE_3_DIRECTORY + "/config.toml", "w") as config_file:
         config_text = gen_config(3)
         config_file.write(config_text)
 

@@ -1,28 +1,18 @@
-# hosts will have dummy IP addresses
 host1:
   hosts:
-    172.213.44.265:
+    192.168.56.100:
   vars:
-    ansible_user: poa
-    ansible_ssh_private_key_file: ~/private-keys/azure-poa.key
+    ansible_user: poa-node1
+    ansible_ssh_private_key_file: ~/.ssh/id_rsa  # or your custom key path
 
 host2:
   hosts:
-    140.238.90.170:
+    192.168.56.101:
   vars: 
-    ansible_user: ubuntu
-    ansible_ssh_private_key_file: ~/private-keys/oracle-poa.key
-
-test_localhost:
-  hosts:
-    127.0.0.1:
-  vars:
-    ansible_user: devops
-    ansible_port: 8000
-    ansible_ssh_private_key_file: ~/docker-ubuntu-sshd/private.key
+    ansible_user: poa-node2
+    ansible_ssh_private_key_file: ~/.ssh/id_rsa  # update if needed
 
 poa_network:
   children:
     host1:
     host2:
-

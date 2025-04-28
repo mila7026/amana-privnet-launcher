@@ -1,18 +1,10 @@
-host1:
-  hosts:
-    192.168.56.100:
-  vars:
-    ansible_user: poa-node1
-    ansible_ssh_private_key_file: ~/.ssh/id_rsa  # or your custom key path
-
-host2:
-  hosts:
-    192.168.56.101:
-  vars: 
-    ansible_user: poa-node2
-    ansible_ssh_private_key_file: ~/.ssh/id_rsa  # update if needed
-
-poa_network:
+all:
   children:
-    host1:
-    host2:
+    poa_nodes:
+      hosts:
+        poa-node1:
+          ansible_host: 192.168.56.100
+          ansible_user: poa-node1
+        poa-node2:
+          ansible_host: 192.168.56.101
+          ansible_user: poa-node2

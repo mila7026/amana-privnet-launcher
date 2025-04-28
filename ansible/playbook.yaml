@@ -1,15 +1,14 @@
----
 - name: Launch QNG Amana Privnet Node
   hosts: poa_nodes
   become: yes
   vars:
     qng_binary_path: /usr/local/bin/qng
-    data_dir: /home/poa-node2/.qng/data/privnet
-    config_file: /home/poa-node2/qng_privnet/node2/amana-privnet-launcher/config.toml
-    password_file: /home/poa-node2/qng_privnet/node2/amana-privnet-launcher/password.txt
+    data_dir: /home/{{ ansible_user }}/.qng/data/privnet
+    config_file: /home/{{ ansible_user }}/qng_privnet/{{ inventory_hostname }}/amana-privnet-launcher/config.toml
+    password_file: /home/{{ ansible_user }}/qng_privnet/{{ inventory_hostname }}/amana-privnet-launcher/password.txt
     mining_address: "SeRg5WhrcEKBGd6YsA5Um1wpQkYuKei3p1"  # Example Base58 address
   tasks:
-    - name: Copy QNG binary
+    - name: Ensure QNG binary is installed
       copy:
         src: "{{ qng_binary_path }}"
         dest: /usr/local/bin/qng
@@ -21,20 +20,21 @@
         state: directory
         mode: '0755'
 
-    - name: Copy config.toml
+    - name: Copy config.toml to correct location
       copy:
         src: "{{ config_file }}"
-        dest: /home/poa-node2/.qng/qng.conf
+        dest: /home/{{ ansible_user }}/.qng/qng.conf
 
     - name: Launch QNG Node with Amana Privnet
       shell: |
         nohup qng \
-          --configfile /home/poa-node2/.qng/qng.conf \
+          --configfile /home/{{ ansible_user }}/.qng/qng.conf \
           --privnet \
           --acctmode \
           --generate \
           --amana \
+          --modules=admin,eth,net,web3 \
           --miningaddr {{ mining_address }} \
-          --datadir {{ data_dir }} &
+          --datadir {{ data_dir }} > /home/{{ ansible_user }}/nohup.out 2>&1 &
       args:
         executable: /bin/bash

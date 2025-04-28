@@ -1,79 +1,41 @@
-- name: Test Ansible
-  hosts: poa_network
+---
+- name: Launch QNG Amana Privnet Node
+  hosts: poa_nodes
+  become: yes
+  vars:
+    qng_binary_path: /usr/local/bin/qng
+    data_dir: /home/poa-node2/.qng/data/privnet
+    config_file: /home/poa-node2/qng_privnet/node2/amana-privnet-launcher/config.toml
+    password_file: /home/poa-node2/qng_privnet/node2/amana-privnet-launcher/password.txt
+    mining_address: "SeRg5WhrcEKBGd6YsA5Um1wpQkYuKei3p1"  # Base58 address
   tasks:
-    - name: Ping hosts
-      ansible.builtin.ping:
-    
-    - name: Print Message
-      ansible.builtin.debug:
-        msg: Hello World!
-  
-  tags: test-ansible 
+    - name: Copy QNG binary
+      copy:
+        src: "{{ qng_binary_path }}"
+        dest: /usr/local/bin/qng
+        mode: '0755'
 
-
-- name: Set up Geth RPC node & pm2
-  hosts: test_server
-  tags: install-rpc
-      
-  tasks:
-    - name: Create directory to run Geth node
-      ansible.builtin.file:
-        path: ~/geth-node/
+    - name: Create data directory
+      file:
+        path: "{{ data_dir }}"
         state: directory
-        mode: '0755' 
-    
-    - name: Download Geth binary (v.1.13.12) & untar
-      ansible.builtin.unarchive:
-        src: https://gethstore.blob.core.windows.net/builds/geth-linux-amd64-1.13.12-02eb36af.tar.gz
-        dest: ~/geth-node/
-        remote_src: yes
-        creates: ~/geth-node/geth-linux-amd64-1.13.12-02eb36af
-    
-    - name: Install Curl 
-      become: yes
-      ansible.builtin.apt:
-        name: curl
-        state: latest
-        update_cache: yes
+        mode: '0755'
 
-    - name: Download and install NVM
-      ansible.builtin.shell:
-        cmd: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-        creates: ~/.nvm
-        executable: /bin/bash
-    
-    - name: Install node
-      ansible.builtin.shell: source ~/.nvm/nvm.sh && nvm install {{item}}
+    - name: Copy config.toml
+      copy:
+        src: "{{ config_file }}"
+        dest: /home/poa-node2/.qng/qng.conf
+
+    - name: Launch QNG Node with Amana Privnet
+      shell: |
+        nohup qng \
+          --configfile /home/poa-node2/.qng/qng.conf \
+          --privnet \
+          --acctmode \
+          --generate \
+          --amana \
+          --miningaddr {{ mining_address }} \
+          --datadir {{ data_dir }} &
       args:
         executable: /bin/bash
-        chdir: "$HOME"
-        creates: "$HOME/.nvm/versions/node/v{{item}}"
-      loop:
-        - 20.15.0 
-    
-    - name: Install pm2
-      ansible.builtin.shell:
-        cmd: source ~/.nvm/nvm.sh && nvm use 20 && npm install -g pm2
-        executable: /bin/bash
-
-    - name: Copy genesis & launch script
-      ansible.builtin.copy:
-        src: "{{ item }}"
-        dest: ~/geth-node/
-      loop:
-        - genesis.json
-        - launch.sh
-    
-    - name: Initialse Geth database
-      ansible.builtin.shell:
-        cmd: ./geth-linux-amd64-1.13.12-02eb36af/geth init --datadir data genesis.json
-        chdir: ~/geth-node
-        executable: /bin/bash
-
-    - name: Run the node
-      ansible.builtin.shell:
-        cmd: source ~/.nvm/nvm.sh && nvm use 20 && pm2 start launch.sh --name node-rpc
-        chdir: ~/geth-node
-        executable: /bin/bash
-
 
